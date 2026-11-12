@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+coverage/
+.env
+.env.local
+.env*.local
+*.tsbuildinfo
+next-env.d.ts
+.vercel
+.DS_Store
+# Raw stock footage (only compressed files in public/ are committed)
+.video-src/
+.video-work/
