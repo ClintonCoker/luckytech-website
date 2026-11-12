@@ -47,6 +47,9 @@ How payment is checked: after the customer pays, the site asks Paystack or Flutt
 | Menu links | `src/content/nav.ts` |
 | Colours and fonts | `src/styles/globals.css` |
 
+### Homepage videos
+Four free Pexels clips (iPhone close-up, Android unboxing, fitting a phone case, headphones unboxing) play in turn behind the headline. Each has a computer version (1280×720) and a phone version (720×1280), about 6.4 MB for all eight files, and only the first one loads straight away. To change them, replace the files in `public/videos/hero/` and edit `src/content/media.ts`. Pexels videos are free for commercial use; credit isn't required.
+
 ### Product photos
 Products show a drawn device in their colours until a photo is added. To add one, put the image in `public/products/` (e.g. `public/products/iphone-16-plus-128gb.jpg`) and add `image: "/products/iphone-16-plus-128gb.jpg"` to that product in `products.ts`. Transparent PNGs or plain backgrounds look best.
 
