@@ -11,7 +11,7 @@ export default async function LoginPage() {
     <div className="relative grid min-h-dvh place-items-center overflow-hidden px-4">
       <div className="aurora" aria-hidden="true" />
       <div className="card relative w-full max-w-sm p-8">
-        <span className="grid h-12 w-12 place-items-center rounded-xl bg-brand font-display font-extrabold">L<span className="text-signal-soft">K</span>T</span>
+        <span className="grid h-12 w-12 place-items-center rounded-xl bg-brand font-display font-extrabold"><span className="whitespace-nowrap">L<span className="text-signal-soft">K</span>T</span></span>
         <h1 className="mt-6 font-display text-2xl font-semibold">LuckyTech admin</h1>
         <p className="mt-1 text-sm text-mist">Stock and products. Staff only.</p>
         {!adminConfigured() && (
