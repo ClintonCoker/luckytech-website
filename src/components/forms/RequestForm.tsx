@@ -79,7 +79,7 @@ export function RequestForm({ initialNeed = "", initialPayment = "", initialMode
         <a href={result.whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn btn-wa mt-8">
           <IconWhatsApp /> Send on WhatsApp
         </a>
-        <button type="button" onClick={() => { setStatus("idle"); setResult(null); }} className="mt-4 block w-full text-sm text-mist underline-offset-4 hover:text-white hover:underline">
+        <button type="button" onClick={() => { setStatus("idle"); setResult(null); }} className="mt-4 block w-full text-sm text-mist underline-offset-4 hover:text-cloud hover:underline">
           Make another request
         </button>
       </motion.div>

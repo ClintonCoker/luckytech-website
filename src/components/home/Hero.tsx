@@ -16,9 +16,9 @@ export function Hero({ productCount }: { productCount: number }) {
         <HeroText productCount={productCount} />
         {!hasVideo && <DeviceStage />}
       </div>
-      <Link href="#featured" className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-mist hover:text-white sm:flex">
+      <Link href="#featured" className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-mist hover:text-cloud sm:flex">
         Scroll
-        <span className="h-10 w-[2px] overflow-hidden rounded-full bg-white/10"><span className="block h-1/2 w-full animate-[float_1.8s_ease-in-out_infinite] bg-glow" /></span>
+        <span className="h-10 w-[2px] overflow-hidden rounded-full bg-cloud/10"><span className="block h-1/2 w-full animate-[float_1.8s_ease-in-out_infinite] bg-glow" /></span>
       </Link>
     </section>
   );

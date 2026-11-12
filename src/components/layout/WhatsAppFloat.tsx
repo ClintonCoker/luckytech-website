@@ -30,7 +30,7 @@ export function WhatsAppFloat() {
                     href={whatsappLink(b, `Hello LuckyTech ${b.city}, I have a question.`)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between rounded-2xl bg-white/5 px-4 py-3 text-sm font-medium ring-1 ring-white/10 transition hover:bg-[#25d366]/15 hover:ring-[#25d366]/60"
+                    className="flex items-center justify-between rounded-2xl bg-cloud/5 px-4 py-3 text-sm font-medium ring-1 ring-cloud/10 transition hover:bg-[#25d366]/15 hover:ring-[#25d366]/60"
                   >
                     <span>{b.label}</span>
                     <IconWhatsApp className="text-[#25d366]" />

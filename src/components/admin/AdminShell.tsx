@@ -12,11 +12,11 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             Admin
           </Link>
           <nav className="flex items-center gap-1 text-sm">
-            <Link href="/admin" className="rounded-full px-3 py-2 text-mist hover:text-white">Stock</Link>
-            <Link href="/admin/products/new" className="rounded-full px-3 py-2 text-mist hover:text-white">Add product</Link>
-            <Link href="/" target="_blank" className="rounded-full px-3 py-2 text-mist hover:text-white">View shop ↗</Link>
+            <Link href="/admin" className="rounded-full px-3 py-2 text-mist hover:text-cloud">Stock</Link>
+            <Link href="/admin/products/new" className="rounded-full px-3 py-2 text-mist hover:text-cloud">Add product</Link>
+            <Link href="/" target="_blank" className="rounded-full px-3 py-2 text-mist hover:text-cloud">View shop ↗</Link>
             <form action={logoutAction}>
-              <button type="submit" className="rounded-full px-3 py-2 text-mist hover:text-white">Sign out</button>
+              <button type="submit" className="rounded-full px-3 py-2 text-mist hover:text-cloud">Sign out</button>
             </form>
           </nav>
         </div>

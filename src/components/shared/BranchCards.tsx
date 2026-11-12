@@ -36,7 +36,7 @@ export function BranchCards({ withMap = true }: { withMap?: boolean }) {
               <ul className="mt-4 space-y-2">
                 {b.phones.map((p) => (
                   <li key={p}>
-                    <a href={telHref(p)} className="inline-flex items-center gap-3 text-mist hover:text-white">
+                    <a href={telHref(p)} className="inline-flex items-center gap-3 text-mist hover:text-cloud">
                       <IconPhone className="text-glow" /> <span className="tabular">{formatPhone(p)}</span>
                     </a>
                   </li>

@@ -18,7 +18,7 @@ export function PayLater({ catalog }: { catalog: Product[] }) {
   return (
     <section className="wrap py-12" aria-labelledby="paylater-title">
       <Reveal>
-        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-signal via-[#a3101f] to-[#3b0710] p-8 sm:p-12 lg:p-16">
+        <div className="on-dark relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-signal via-[#a3101f] to-[#3b0710] p-8 sm:p-12 lg:p-16">
           <div className="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full border-[40px] border-white/10" />
           <div className="relative grid gap-10 lg:grid-cols-2 lg:items-center">
             <div>

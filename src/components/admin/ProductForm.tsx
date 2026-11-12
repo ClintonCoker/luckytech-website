@@ -179,18 +179,18 @@ export function ProductForm({ product }: { product?: Product }) {
           </div>
           <ul className="mt-5 grid grid-cols-3 gap-3 sm:grid-cols-4">
             {images.map((src, i) => (
-              <li key={src} className="group relative aspect-square overflow-hidden rounded-2xl bg-panel ring-1 ring-white/10">
+              <li key={src} className="group relative aspect-square overflow-hidden rounded-2xl bg-panel ring-1 ring-cloud/10">
                 <Image src={src} alt={`Photo ${i + 1}`} fill sizes="160px" className="object-cover" />
                 {i === 0 && <span className="absolute left-2 top-2 rounded-full bg-night/80 px-2 py-0.5 text-[0.65rem] font-bold">MAIN</span>}
                 <div className="absolute inset-x-0 bottom-0 flex justify-between bg-night/80 p-1.5 text-xs opacity-100 sm:opacity-0 sm:group-hover:opacity-100">
-                  <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="rounded px-2 py-1 hover:bg-white/10 disabled:opacity-30" aria-label="Move left">←</button>
-                  <button type="button" onClick={() => set("images", images.filter((x) => x !== src))} className="rounded px-2 py-1 text-signal-soft hover:bg-white/10">Remove</button>
-                  <button type="button" onClick={() => move(i, 1)} disabled={i === images.length - 1} className="rounded px-2 py-1 hover:bg-white/10 disabled:opacity-30" aria-label="Move right">→</button>
+                  <button type="button" onClick={() => move(i, -1)} disabled={i === 0} className="rounded px-2 py-1 hover:bg-cloud/10 disabled:opacity-30" aria-label="Move left">←</button>
+                  <button type="button" onClick={() => set("images", images.filter((x) => x !== src))} className="rounded px-2 py-1 text-signal-soft hover:bg-cloud/10">Remove</button>
+                  <button type="button" onClick={() => move(i, 1)} disabled={i === images.length - 1} className="rounded px-2 py-1 hover:bg-cloud/10 disabled:opacity-30" aria-label="Move right">→</button>
                 </div>
               </li>
             ))}
             {Array.from({ length: uploading }, (_, i) => (
-              <li key={`up-${i}`} className="grid aspect-square place-items-center rounded-2xl bg-panel text-xs text-mist ring-1 ring-white/10">Uploading…</li>
+              <li key={`up-${i}`} className="grid aspect-square place-items-center rounded-2xl bg-panel text-xs text-mist ring-1 ring-cloud/10">Uploading…</li>
             ))}
             {images.length === 0 && uploading === 0 && (
               <li className="col-span-full rounded-2xl border border-dashed border-line p-8 text-center text-sm text-mist">No photos yet.</li>
@@ -241,7 +241,7 @@ export function ProductForm({ product }: { product?: Product }) {
         <button type="submit" disabled={pending || uploading > 0} className="btn btn-primary w-full">{pending ? "Saving…" : editing ? "Save changes" : "Add product"}</button>
         {editing && (
           <div className="flex justify-between gap-3 text-sm">
-            <a href={`/product/${product!.slug}`} target="_blank" rel="noopener noreferrer" className="text-mist underline-offset-4 hover:text-white hover:underline">View in shop ↗</a>
+            <a href={`/product/${product!.slug}`} target="_blank" rel="noopener noreferrer" className="text-mist underline-offset-4 hover:text-cloud hover:underline">View in shop ↗</a>
             <button type="button" onClick={remove} disabled={pending} className="text-signal-soft underline-offset-4 hover:underline">Delete product</button>
           </div>
         )}

@@ -22,7 +22,7 @@ export function Footer() {
           <p className="text-sm font-semibold">Explore</p>
           <ul className="mt-4 space-y-2.5 text-sm text-mist">
             {[{ href: "/", label: "Home" }, ...nav, { href: "/about", label: "About & FAQ" }, { href: "/cart", label: "Cart" }].map((n) => (
-              <li key={n.href}><Link href={n.href} className="hover:text-white">{n.label}</Link></li>
+              <li key={n.href}><Link href={n.href} className="hover:text-cloud">{n.label}</Link></li>
             ))}
           </ul>
         </nav>
@@ -35,7 +35,7 @@ export function Footer() {
             </address>
             <ul className="mt-3 space-y-1 text-sm">
               {b.phones.map((p) => (
-                <li key={p}><a href={telHref(p)} className="text-mist hover:text-white tabular">{formatPhone(p)}</a></li>
+                <li key={p}><a href={telHref(p)} className="text-mist hover:text-cloud tabular">{formatPhone(p)}</a></li>
               ))}
             </ul>
           </div>

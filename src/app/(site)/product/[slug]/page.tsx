@@ -57,7 +57,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       <div className="aurora opacity-60" aria-hidden="true" />
       <div className="wrap relative">
         <nav aria-label="Breadcrumb" className="text-sm text-mist">
-          <Link href="/shop" className="hover:text-white">Shop</Link> <span aria-hidden="true">/</span> <span className="text-white">{p.name}</span>
+          <Link href="/shop" className="hover:text-cloud">Shop</Link> <span aria-hidden="true">/</span> <span className="text-cloud">{p.name}</span>
         </nav>
         <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
           <ProductGallery product={p}>
@@ -77,13 +77,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               {p.compareAt && p.compareAt > p.price && <p className="pb-1 text-lg text-mist line-through tabular">{formatNaira(p.compareAt)}</p>}
             </div>
             <p className="mt-2 text-sm text-mist">
-              Or take it home with <span className="font-semibold text-white">{formatNaira(downPayment(p.price))}</span> down (30%).
+              Or take it home with <span className="font-semibold text-cloud">{formatNaira(downPayment(p.price))}</span> down (30%).
             </p>
 
             {state === "out" ? (
-              <p className="mt-6 rounded-2xl bg-white/5 p-4 text-sm ring-1 ring-white/10"><span className="font-semibold">Sold out for now.</span> Message us on WhatsApp and we&rsquo;ll tell you when it&rsquo;s back, or ask about something similar.</p>
+              <p className="mt-6 rounded-2xl bg-cloud/5 p-4 text-sm ring-1 ring-cloud/10"><span className="font-semibold">Sold out for now.</span> Message us on WhatsApp and we&rsquo;ll tell you when it&rsquo;s back, or ask about something similar.</p>
             ) : state === "low" ? (
-              <p className="mt-6 text-sm font-semibold text-[#ffb020]">Hurry, only {p.stock} left in stock.</p>
+              <p className="mt-6 text-sm font-semibold text-[#a85f00]">Hurry, only {p.stock} left in stock.</p>
             ) : p.stock != null ? (
               <p className="mt-6 text-sm text-glow">In stock</p>
             ) : null}

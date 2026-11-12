@@ -54,7 +54,7 @@ export function CartView({ catalog }: { catalog: Product[] }) {
               <Link href={`/product/${p.slug}`} className="font-display font-semibold hover:text-glow">{productTitle(p)}</Link>
               <p className="text-sm text-mist">{p.condition} · {formatNaira(p.price)} each</p>
               <div className="mt-3 flex items-center gap-3">
-                <div className="flex items-center rounded-full ring-1 ring-white/15">
+                <div className="flex items-center rounded-full ring-1 ring-cloud/15">
                   <button type="button" className="grid h-9 w-9 place-items-center" onClick={() => cart.setQty(p.slug, qty - 1)} aria-label={`One fewer ${p.name}`}>−</button>
                   <span className="w-6 text-center text-sm font-semibold tabular">{qty}</span>
                   <button type="button" className="grid h-9 w-9 place-items-center disabled:opacity-30" disabled={qty >= maxQty(p)} onClick={() => cart.setQty(p.slug, qty + 1)} aria-label={`One more ${p.name}`}>+</button>

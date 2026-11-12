@@ -7,7 +7,7 @@ export function BrandMarquee() {
       <div className="marquee-mask overflow-hidden">
         <ul className="flex w-max animate-marquee items-center gap-14 pr-14">
           {[...row, ...row].map((b, i) => (
-            <li key={i} aria-hidden={i >= brands.length} className="flex items-center gap-14 font-display text-2xl font-semibold tracking-tight text-white/40 sm:text-3xl">
+            <li key={i} aria-hidden={i >= brands.length} className="flex items-center gap-14 font-display text-2xl font-semibold tracking-tight text-cloud/35 sm:text-3xl">
               {b}
               <span className="h-2 w-2 rounded-full bg-glow/50" />
             </li>

@@ -87,7 +87,7 @@ export function Inventory({ products }: { products: Product[] }) {
 
       <div className="mt-4 overflow-x-auto rounded-3xl border border-line" aria-busy={pending}>
         <table className="w-full min-w-[46rem] text-sm">
-          <thead className="bg-white/[0.03] text-left text-xs uppercase tracking-[0.1em] text-mist">
+          <thead className="bg-cloud/[0.03] text-left text-xs uppercase tracking-[0.1em] text-mist">
             <tr>
               <th scope="col" className="px-4 py-3">Product</th>
               <th scope="col" className="px-4 py-3">Price</th>
@@ -115,7 +115,7 @@ export function Inventory({ products }: { products: Product[] }) {
                   <td className="px-4 py-3 tabular">{formatNaira(p.price)}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1">
-                      <button type="button" onClick={() => adjust(p, -1)} disabled={!p.stock} className="grid h-9 w-9 place-items-center rounded-full ring-1 ring-white/15 hover:ring-glow disabled:opacity-30" aria-label={`One fewer ${p.name}`}>−</button>
+                      <button type="button" onClick={() => adjust(p, -1)} disabled={!p.stock} className="grid h-9 w-9 place-items-center rounded-full ring-1 ring-cloud/15 hover:ring-glow disabled:opacity-30" aria-label={`One fewer ${p.name}`}>−</button>
                       <input
                         key={`${p.slug}-${p.stock}`}
                         defaultValue={p.stock ?? ""}
@@ -126,15 +126,15 @@ export function Inventory({ products }: { products: Product[] }) {
                         onBlur={(e) => e.target.value !== String(p.stock ?? "") && setExact(p, e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
                       />
-                      <button type="button" onClick={() => adjust(p, 1)} className="grid h-9 w-9 place-items-center rounded-full ring-1 ring-white/15 hover:ring-glow" aria-label={`One more ${p.name}`}>+</button>
-                      <button type="button" onClick={() => adjust(p, 5)} className="h-9 rounded-full px-2.5 text-xs font-semibold ring-1 ring-white/15 hover:ring-glow" aria-label={`Five more ${p.name}`}>+5</button>
+                      <button type="button" onClick={() => adjust(p, 1)} className="grid h-9 w-9 place-items-center rounded-full ring-1 ring-cloud/15 hover:ring-glow" aria-label={`One more ${p.name}`}>+</button>
+                      <button type="button" onClick={() => adjust(p, 5)} className="h-9 rounded-full px-2.5 text-xs font-semibold ring-1 ring-cloud/15 hover:ring-glow" aria-label={`Five more ${p.name}`}>+5</button>
                     </div>
                   </td>
                   <td className="px-4 py-3">
                     {s === "out" ? (
                       <span className="rounded-full bg-signal/15 px-2.5 py-1 text-xs font-bold text-signal-soft">Sold out</span>
                     ) : s === "low" ? (
-                      <span className="rounded-full bg-[#ffb020]/15 px-2.5 py-1 text-xs font-bold text-[#ffb020]">{p.stock} left</span>
+                      <span className="rounded-full bg-[#ffb020]/15 px-2.5 py-1 text-xs font-bold text-[#a85f00]">{p.stock} left</span>
                     ) : s === "untracked" ? (
                       <span className="text-xs text-mist">Not counted</span>
                     ) : (
@@ -143,10 +143,10 @@ export function Inventory({ products }: { products: Product[] }) {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-2">
-                      <button type="button" onClick={() => toggle(p)} className="rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ring-white/15 hover:ring-glow">
+                      <button type="button" onClick={() => toggle(p)} className="rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ring-cloud/15 hover:ring-glow">
                         {p.active === false ? "Show in shop" : "Hide"}
                       </button>
-                      <Link href={`/admin/products/${p.slug}`} className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-semibold hover:bg-white/15">Edit</Link>
+                      <Link href={`/admin/products/${p.slug}`} className="rounded-full bg-cloud/10 px-3 py-1.5 text-xs font-semibold hover:bg-cloud/15">Edit</Link>
                     </div>
                   </td>
                 </tr>

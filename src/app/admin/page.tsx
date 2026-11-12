@@ -31,8 +31,8 @@ export default async function AdminHome() {
           <p className="mt-2 text-mist">The admin needs a free Supabase database to save stock and products. It takes about 10 minutes, once.</p>
           <ol className="mt-6 list-decimal space-y-2 pl-5 text-sm text-mist">
             <li>Create a project at supabase.com.</li>
-            <li>Open <b className="text-white">SQL Editor</b>, paste the contents of <code className="font-mono">supabase/schema.sql</code> and click <b className="text-white">Run</b>.</li>
-            <li>From <b className="text-white">Project Settings → API</b>, copy the Project URL and the <b className="text-white">service_role</b> key into <code className="font-mono">SUPABASE_URL</code> and <code className="font-mono">SUPABASE_SERVICE_ROLE_KEY</code>.</li>
+            <li>Open <b className="text-cloud">SQL Editor</b>, paste the contents of <code className="font-mono">supabase/schema.sql</code> and click <b className="text-cloud">Run</b>.</li>
+            <li>From <b className="text-cloud">Project Settings → API</b>, copy the Project URL and the <b className="text-cloud">service_role</b> key into <code className="font-mono">SUPABASE_URL</code> and <code className="font-mono">SUPABASE_SERVICE_ROLE_KEY</code>.</li>
             <li>Restart the site (or redeploy on Vercel) and come back here.</li>
           </ol>
           <p className="mt-6 text-sm text-mist">Full steps are in the README.</p>
@@ -76,7 +76,7 @@ export default async function AdminHome() {
         {[
           ["Products in shop", String(live.length), ""],
           ["Sold out", String(out.length), out.length ? "text-signal-soft" : ""],
-          [`${LOW_STOCK} or fewer left`, String(low.length), low.length ? "text-[#ffb020]" : ""],
+          [`${LOW_STOCK} or fewer left`, String(low.length), low.length ? "text-[#a85f00]" : ""],
           ["Units in stock", String(units), ""],
           ["Stock value", formatNaira(value), ""],
         ].map(([label, v, tone]) => (
@@ -98,7 +98,7 @@ export default async function AdminHome() {
           )}
           {low.length > 0 && (
             <div className="rounded-3xl bg-[#ffb020]/10 p-5 ring-1 ring-[#ffb020]/40">
-              <p className="font-semibold text-[#ffb020]">{LOW_STOCK} or fewer left ({low.length})</p>
+              <p className="font-semibold text-[#a85f00]">{LOW_STOCK} or fewer left ({low.length})</p>
               <p className="mt-1 text-sm text-mist">{low.map((p) => `${p.name}${p.storage ? ` ${p.storage}` : ""} (${p.stock})`).join(" · ")}</p>
             </div>
           )}

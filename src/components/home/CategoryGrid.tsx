@@ -27,7 +27,7 @@ export function CategoryGrid({ catalog }: { catalog: Product[] }) {
                 <p className="mt-2 max-w-[16rem] text-sm text-mist">{c.blurb}</p>
               </div>
               {cover(c.id) ? (
-                <div className="absolute -bottom-4 -right-4 h-44 w-44 overflow-hidden rounded-3xl ring-1 ring-white/10 transition-transform duration-700 group-hover:-translate-y-3 group-hover:rotate-[-4deg]">
+                <div className="absolute -bottom-4 -right-4 h-44 w-44 overflow-hidden rounded-3xl ring-1 ring-cloud/10 transition-transform duration-700 group-hover:-translate-y-3 group-hover:rotate-[-4deg]">
                   <Image src={cover(c.id)!} alt="" fill sizes="176px" className="object-cover" />
                 </div>
               ) : (
@@ -38,7 +38,7 @@ export function CategoryGrid({ catalog }: { catalog: Product[] }) {
           </Reveal>
         ))}
         <Reveal delay={0.24}>
-          <Link href="/accessories" className="card card-glow group relative flex h-72 flex-col justify-between overflow-hidden bg-gradient-to-br from-brand to-[#06331a] p-6">
+          <Link href="/accessories" className="on-dark card card-glow group relative flex h-72 flex-col justify-between overflow-hidden !border-0 bg-gradient-to-br from-brand-bright to-brand p-6">
             <div className="relative z-10">
               <p className="text-sm text-white/70">Chargers · pouches · screen guards · more</p>
               <h3 className="mt-1 font-display text-2xl font-semibold">Accessories & gadgets</h3>

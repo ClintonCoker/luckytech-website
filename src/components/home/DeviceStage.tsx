@@ -31,7 +31,7 @@ export function DeviceStage() {
     >
       <div className="absolute inset-[12%] rounded-full bg-[radial-gradient(circle,rgb(62_224_127/0.35),transparent_65%)] blur-2xl" />
       <div className="absolute inset-[22%] rounded-full border border-glow/20" />
-      <div className="absolute inset-[8%] rounded-full border border-white/5" />
+      <div className="absolute inset-[8%] rounded-full border border-cloud/5" />
       <motion.div style={{ rotateY: rotY, rotateX: rotX, transformStyle: "preserve-3d" }} className="absolute inset-0">
         <motion.div style={{ x: backX }} className="absolute left-[14%] top-[10%] h-[74%] w-[36%] animate-float [--r:-10deg] [animation-delay:-2s]">
           <DeviceArt style="galaxy-s" tint={["#2d4a3e", "#14251d"]} id="hero-android" pro className="h-full w-full drop-shadow-[0_40px_50px_rgba(0,0,0,0.6)]" />

@@ -173,7 +173,7 @@ export function CheckoutForm({ catalog, paystackKey, flutterwaveKey }: { catalog
                 <label key={b.id} className="chip !justify-between !rounded-2xl !p-4">
                   <input type="radio" name="branch" value={b.id} checked={branchId === b.id} onChange={() => setBranchId(b.id)} />
                   <span>
-                    <span className="block font-semibold text-white">{b.label}</span>
+                    <span className="block font-semibold text-cloud">{b.label}</span>
                     <span className="block text-xs">{b.address[0]}, {b.city}</span>
                   </span>
                 </label>
