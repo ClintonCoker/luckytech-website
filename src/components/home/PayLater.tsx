@@ -2,16 +2,17 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { products, productTitle } from "@/content/products";
+import { productTitle, stockState, type Product } from "@/content/products";
 import { downPayment } from "@/lib/pricing";
 import { formatNaira } from "@/lib/format";
 import { Reveal } from "@/components/shared/Reveal";
 
 /** Buy now, pay later: shows the 30% down payment for a chosen phone. */
-export function PayLater() {
-  const phones = useMemo(() => products.filter((p) => p.category === "smartphones").sort((a, b) => b.price - a.price), []);
+export function PayLater({ catalog }: { catalog: Product[] }) {
+  const phones = useMemo(() => catalog.filter((p) => p.category === "smartphones" && stockState(p) !== "out").sort((a, b) => b.price - a.price), [catalog]);
   const [slug, setSlug] = useState(phones[0]?.slug ?? "");
   const p = phones.find((x) => x.slug === slug) ?? phones[0];
+  if (!p) return null;
   const down = downPayment(p.price);
 
   return (

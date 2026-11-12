@@ -1,4 +1,4 @@
-import { discountPercent, type Category, type Condition, type Product } from "@/content/products";
+import { discountPercent, stockState, type Category, type Condition, type Product } from "@/content/products";
 
 export type SortKey = "featured" | "price-asc" | "price-desc" | "discount";
 
@@ -8,6 +8,7 @@ export interface ShopFilters {
   condition: Condition | "all";
   sort: SortKey;
   query: string;
+  inStock?: boolean;
 }
 
 export function filterProducts(all: readonly Product[], f: ShopFilters): Product[] {
@@ -16,6 +17,7 @@ export function filterProducts(all: readonly Product[], f: ShopFilters): Product
     if (f.category !== "all" && p.category !== f.category) return false;
     if (f.brand !== "all" && p.brand !== f.brand) return false;
     if (f.condition !== "all" && p.condition !== f.condition) return false;
+    if (f.inStock && stockState(p) === "out") return false;
     if (words.length) {
       const hay = `${p.name} ${p.brand} ${p.storage ?? ""} ${p.ram ?? ""} ${p.condition} ${p.network ?? ""}`.toLowerCase();
       return words.every((w) => hay.includes(w));
@@ -36,5 +38,6 @@ export function filterProducts(all: readonly Product[], f: ShopFilters): Product
     default:
       sorted.sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)));
   }
-  return sorted;
+  // Sold-out products always go to the end.
+  return [...sorted.filter((p) => stockState(p) !== "out"), ...sorted.filter((p) => stockState(p) === "out")];
 }

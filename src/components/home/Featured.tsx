@@ -1,12 +1,14 @@
 import Link from "next/link";
-import { products } from "@/content/products";
+import { stockState, type Product } from "@/content/products";
 import { ProductCard } from "@/components/product/ProductCard";
 import { SectionHead } from "@/components/shared/SectionHead";
 import { Reveal } from "@/components/shared/Reveal";
 import { IconArrow } from "@/components/shared/Icons";
 
-export function Featured() {
-  const featured = products.filter((p) => p.featured);
+export function Featured({ catalog }: { catalog: Product[] }) {
+  const inStock = catalog.filter((p) => stockState(p) !== "out");
+  const picked = inStock.filter((p) => p.featured);
+  const featured = (picked.length >= 3 ? picked : [...picked, ...inStock.filter((p) => !p.featured)]).slice(0, 6);
   return (
     <section id="featured" className="wrap py-24 sm:py-32" aria-labelledby="featured-title">
       <SectionHead

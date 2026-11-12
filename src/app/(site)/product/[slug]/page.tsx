@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { discountPercent, productBySlug, products, productTitle } from "@/content/products";
-import { ProductMedia } from "@/components/product/ProductMedia";
+import { discountPercent, productBySlug, productTitle, stockState } from "@/content/products";
+import { ProductGallery } from "@/components/product/ProductGallery";
+import { StockBadge } from "@/components/product/StockBadge";
+import { getCatalog } from "@/lib/catalog.server";
 import { ProductCard } from "@/components/product/ProductCard";
 import { ProductActions } from "@/components/product/ProductActions";
 import { formatNaira } from "@/lib/format";
@@ -10,25 +12,28 @@ import { downPayment } from "@/lib/pricing";
 import { getSiteUrl } from "@/lib/env";
 import { IconBolt, IconShield, IconWrench } from "@/components/shared/Icons";
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  return (await getCatalog()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const p = productBySlug((await params).slug);
+  const p = productBySlug((await params).slug, await getCatalog());
   if (!p) return {};
   return {
     title: `${productTitle(p)} (${p.condition})`,
     description: `${productTitle(p)}, ${p.condition}, ${formatNaira(p.price)} at LuckyTech Owo and Akure. Pay online, pay later with 30% down, or order on WhatsApp.`,
     alternates: { canonical: `/product/${p.slug}` },
+    openGraph: p.images?.[0] ? { images: [{ url: p.images[0] }] } : undefined,
   };
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
-  const p = productBySlug((await params).slug);
+  const catalog = await getCatalog();
+  const p = productBySlug((await params).slug, catalog);
   if (!p) notFound();
   const off = discountPercent(p);
-  const related = products.filter((x) => x.slug !== p.slug && (x.brand === p.brand || x.category === p.category)).slice(0, 4);
+  const state = stockState(p);
+  const related = catalog.filter((x) => x.slug !== p.slug && (x.brand === p.brand || x.category === p.category)).slice(0, 4);
   const specs = [
     ["Brand", p.brand],
     ["Condition", p.condition],
@@ -43,7 +48,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     name: productTitle(p),
     brand: { "@type": "Brand", name: p.brand },
     itemCondition: p.condition === "New" ? "https://schema.org/NewCondition" : "https://schema.org/UsedCondition",
-    offers: { "@type": "Offer", price: p.price, priceCurrency: "NGN", availability: "https://schema.org/InStock", url: `${getSiteUrl()}/product/${p.slug}` },
+    image: p.images,
+    offers: { "@type": "Offer", price: p.price, priceCurrency: "NGN", availability: state === "out" ? "https://schema.org/OutOfStock" : "https://schema.org/InStock", url: `${getSiteUrl()}/product/${p.slug}` },
   };
 
   return (
@@ -54,25 +60,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <Link href="/shop" className="hover:text-white">Shop</Link> <span aria-hidden="true">/</span> <span className="text-white">{p.name}</span>
         </nav>
         <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
-          <div className="card relative aspect-square lg:sticky lg:top-28 lg:self-start">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_55%,rgb(62_224_127/0.22),transparent_60%)]" />
-            <div className="grid-lines" />
-            <div className="absolute inset-[10%] flex items-center justify-center gap-[6%]">
-              <div className="relative h-full w-[42%] animate-float [--r:-6deg]">
-                <ProductMedia product={p} priority className="h-full w-full drop-shadow-[0_40px_50px_rgba(0,0,0,0.6)]" sizes="(min-width: 1024px) 40vw, 90vw" />
-              </div>
-              {!p.image && p.style !== "keypad" && p.style !== "tablet" && (
-                <div className="relative hidden h-[92%] w-[40%] animate-float [--r:5deg] [animation-delay:-3s] sm:block">
-                  <ProductMedia product={p} view="front" className="h-full w-full drop-shadow-[0_40px_50px_rgba(0,0,0,0.6)]" />
-                </div>
-              )}
+          <ProductGallery product={p}>
+            <div className="absolute left-5 top-5 z-10 flex gap-2">
+              <span className="tag-cond !bg-night/70 backdrop-blur" data-used={p.condition === "UK-Used"}>{p.condition}</span>
+              {off > 0 && state !== "out" && <span className="tag-sale">Save {off}%</span>}
             </div>
-            <div className="absolute left-5 top-5 flex gap-2">
-              <span className="tag-cond" data-used={p.condition === "UK-Used"}>{p.condition}</span>
-              {off > 0 && <span className="tag-sale">Save {off}%</span>}
-            </div>
-            {!p.image && <p className="absolute bottom-4 left-5 text-xs text-mist">Illustration. Ask for real photos on WhatsApp.</p>}
-          </div>
+            <StockBadge product={p} className="absolute bottom-5 left-5 z-10" />
+          </ProductGallery>
 
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-glow">{p.brand}</p>
@@ -86,7 +80,17 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               Or take it home with <span className="font-semibold text-white">{formatNaira(downPayment(p.price))}</span> down (30%).
             </p>
 
-            <ProductActions slug={p.slug} title={productTitle(p)} price={formatNaira(p.price)} />
+            {state === "out" ? (
+              <p className="mt-6 rounded-2xl bg-white/5 p-4 text-sm ring-1 ring-white/10"><span className="font-semibold">Sold out for now.</span> Message us on WhatsApp and we&rsquo;ll tell you when it&rsquo;s back, or ask about something similar.</p>
+            ) : state === "low" ? (
+              <p className="mt-6 text-sm font-semibold text-[#ffb020]">Hurry, only {p.stock} left in stock.</p>
+            ) : p.stock != null ? (
+              <p className="mt-6 text-sm text-glow">In stock</p>
+            ) : null}
+
+            <ProductActions slug={p.slug} title={productTitle(p)} price={formatNaira(p.price)} maxQty={state === "out" ? 0 : p.stock == null ? 20 : Math.min(20, p.stock)} />
+
+            {p.description && <p className="mt-8 leading-relaxed text-mist">{p.description}</p>}
 
             <ul className="mt-10 grid gap-3 sm:grid-cols-3">
               {[

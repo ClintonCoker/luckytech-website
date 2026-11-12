@@ -4,7 +4,7 @@ import { HeroVideo } from "@/components/home/HeroVideo";
 import { DeviceStage } from "@/components/home/DeviceStage";
 import { HeroText } from "@/components/home/HeroText";
 
-export function Hero() {
+export function Hero({ productCount }: { productCount: number }) {
   const hasVideo = heroClips.length > 0;
   return (
     <section className="noise relative isolate flex min-h-[100svh] items-center overflow-hidden pb-16 pt-28" aria-labelledby="hero-title">
@@ -13,7 +13,7 @@ export function Hero() {
       <HeroVideo clips={heroClips} />
       {hasVideo && <div className="hero-shade" aria-hidden="true" />}
       <div className={`wrap relative grid items-center gap-12 ${hasVideo ? "" : "lg:grid-cols-[1.1fr_1fr]"}`}>
-        <HeroText />
+        <HeroText productCount={productCount} />
         {!hasVideo && <DeviceStage />}
       </div>
       <Link href="#featured" className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-mist hover:text-white sm:flex">

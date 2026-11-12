@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { branches, branchById } from "@/content/store";
-import { productTitle } from "@/content/products";
+import { productTitle, type Product } from "@/content/products";
 import { cart, useCart } from "@/lib/cart";
 import { priceCart } from "@/lib/pricing";
 import { formatNaira } from "@/lib/format";
@@ -16,10 +16,10 @@ import { IconWhatsApp } from "@/components/shared/Icons";
 type Method = "paystack" | "flutterwave" | "whatsapp";
 type Errors = Partial<Record<keyof OrderContact | "form", string>>;
 
-export function CheckoutForm({ paystackKey, flutterwaveKey }: { paystackKey: string; flutterwaveKey: string }) {
+export function CheckoutForm({ catalog, paystackKey, flutterwaveKey }: { catalog: Product[]; paystackKey: string; flutterwaveKey: string }) {
   const router = useRouter();
   const lines = useCart();
-  const priced = priceCart(lines);
+  const priced = priceCart(lines, catalog);
   const [branchId, setBranchId] = useState<"owo" | "akure">("owo");
   const [contact, setContact] = useState<OrderContact>({ name: "", phone: "", email: "", fulfilment: "pickup", address: "", note: "" });
   const [errors, setErrors] = useState<Errors>({});
@@ -56,7 +56,7 @@ export function CheckoutForm({ paystackKey, flutterwaveKey }: { paystackKey: str
     const res = await fetch("/api/payments/verify", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ provider, reference, transactionId, branch: branchId, lines, contact }),
+      body: JSON.stringify({ provider, reference, transactionId, branch: branchId, lines: priced.lines.map((l) => ({ slug: l.product.slug, qty: l.qty })), contact }),
     });
     const data = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string; whatsappUrl?: string; total?: number };
     if (!data.ok) {
@@ -208,6 +208,11 @@ export function CheckoutForm({ paystackKey, flutterwaveKey }: { paystackKey: str
 
       <aside className="card h-fit p-6 sm:p-7 lg:sticky lg:top-28">
         <h2 className="font-display text-xl font-semibold">3. Pay</h2>
+        {priced.issues.length > 0 && (
+          <p role="alert" className="mt-3 rounded-2xl bg-[#ffb020]/10 p-3 text-sm ring-1 ring-[#ffb020]/40">
+            Some items changed since you added them: {priced.issues.map((i) => (i.kind === "reduced" ? `only ${i.available} ${i.name} left` : `${i.name} sold out`)).join(", ")}. Your total below is updated.
+          </p>
+        )}
         <ul className="mt-4 space-y-3 text-sm">
           {priced.lines.map((l) => (
             <li key={l.product.slug} className="flex justify-between gap-4">

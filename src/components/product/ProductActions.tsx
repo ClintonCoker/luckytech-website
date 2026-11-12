@@ -8,9 +8,10 @@ import { cart } from "@/lib/cart";
 import { productEnquiry, whatsappLink } from "@/lib/whatsapp";
 import { IconWhatsApp } from "@/components/shared/Icons";
 
-export function ProductActions({ slug, title, price }: { slug: string; title: string; price: string }) {
+export function ProductActions({ slug, title, price, maxQty }: { slug: string; title: string; price: string; maxQty: number }) {
   const router = useRouter();
   const [qty, setQty] = useState(1);
+  const soldOut = maxQty < 1;
   const [added, setAdded] = useState(false);
 
   return (
@@ -19,10 +20,11 @@ export function ProductActions({ slug, title, price }: { slug: string; title: st
         <div className="col-span-2 flex w-fit items-center rounded-full ring-1 ring-white/15">
           <button type="button" className="grid h-12 w-12 place-items-center text-xl" onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="One fewer">−</button>
           <span className="w-8 text-center font-semibold tabular" aria-live="polite" aria-label={`Quantity ${qty}`}>{qty}</span>
-          <button type="button" className="grid h-12 w-12 place-items-center text-xl" onClick={() => setQty((q) => Math.min(20, q + 1))} aria-label="One more">+</button>
+          <button type="button" className="grid h-12 w-12 place-items-center text-xl" onClick={() => setQty((q) => Math.min(Math.max(1, maxQty), q + 1))} disabled={soldOut || qty >= maxQty} aria-label="One more">+</button>
         </div>
         <button
           type="button"
+          disabled={soldOut}
           className="btn btn-ghost flex-1"
           onClick={() => {
             cart.add(slug, qty);
@@ -34,13 +36,14 @@ export function ProductActions({ slug, title, price }: { slug: string; title: st
         </button>
         <button
           type="button"
+          disabled={soldOut}
           className="btn btn-primary flex-1"
           onClick={() => {
             cart.add(slug, qty);
             router.push("/checkout");
           }}
         >
-          Buy now
+          {soldOut ? "Sold out" : "Buy now"}
         </button>
       </div>
 

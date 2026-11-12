@@ -3,20 +3,23 @@
 import Link from "next/link";
 import { useDeferredValue, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { categories, productBrands, products, type Category, type Condition } from "@/content/products";
+import { brandsOf, categories, type Category, type Condition, type Product } from "@/content/products";
 import { ProductCard } from "@/components/product/ProductCard";
 import { IconSearch } from "@/components/shared/Icons";
 import { filterProducts, type SortKey } from "@/lib/shop";
 
-export function ShopBrowser({ initialCategory, initialQuery }: { initialCategory: Category | "all"; initialQuery: string }) {
+export function ShopBrowser({ catalog, initialCategory, initialQuery }: { catalog: Product[]; initialCategory: Category | "all"; initialQuery: string }) {
   const [category, setCategory] = useState<Category | "all">(initialCategory);
   const [brand, setBrand] = useState<string>("all");
   const [condition, setCondition] = useState<Condition | "all">("all");
   const [sort, setSort] = useState<SortKey>("featured");
   const [query, setQuery] = useState(initialQuery);
+  const [inStock, setInStock] = useState(false);
   const q = useDeferredValue(query);
+  const brands = useMemo(() => brandsOf(catalog), [catalog]);
+  const shownCategories = useMemo(() => categories.filter((c) => catalog.some((p) => p.category === c.id)), [catalog]);
 
-  const list = useMemo(() => filterProducts(products, { category, brand, condition, sort, query: q }), [category, brand, condition, sort, q]);
+  const list = useMemo(() => filterProducts(catalog, { category, brand, condition, sort, query: q, inStock }), [catalog, category, brand, condition, sort, q, inStock]);
 
   const updateUrl = (c: Category | "all") => {
     const url = new URL(window.location.href);
@@ -34,7 +37,7 @@ export function ShopBrowser({ initialCategory, initialQuery }: { initialCategory
           <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search iPhone 14, Redmi, 256GB…" className="input !rounded-full !pl-11" />
         </label>
         <div className="scrollbar-none flex gap-2 overflow-x-auto">
-          {[{ id: "all" as const, label: "All" }, ...categories].map((c) => (
+          {[{ id: "all" as const, label: "All" }, ...shownCategories].map((c) => (
             <button
               key={c.id}
               type="button"
@@ -48,13 +51,14 @@ export function ShopBrowser({ initialCategory, initialQuery }: { initialCategory
               {c.label}
             </button>
           ))}
+          <button type="button" aria-pressed={inStock} onClick={() => setInStock((v) => !v)} className="chip shrink-0">In stock only</button>
         </div>
         <div className="grid grid-cols-3 gap-2 lg:w-[30rem]">
           <label>
             <span className="sr-only">Brand</span>
             <select className="input !min-h-11 !rounded-full !text-sm" value={brand} onChange={(e) => setBrand(e.target.value)}>
               <option value="all">All brands</option>
-              {productBrands.map((b) => <option key={b} value={b}>{b}</option>)}
+              {brands.map((b) => <option key={b} value={b}>{b}</option>)}
             </select>
           </label>
           <label>
@@ -88,9 +92,9 @@ export function ShopBrowser({ initialCategory, initialQuery }: { initialCategory
       ) : (
         <motion.ul layout className="mt-6 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
           <AnimatePresence mode="popLayout">
-            {list.map((p) => (
+            {list.map((p, i) => (
               <motion.li key={p.slug} layout initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} transition={{ duration: 0.35 }}>
-                <ProductCard product={p} />
+                <ProductCard product={p} priority={i < 4} />
               </motion.li>
             ))}
           </AnimatePresence>

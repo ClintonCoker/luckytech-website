@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { discountPercent, type Product } from "@/content/products";
+import { discountPercent, stockState, type Product } from "@/content/products";
 import { ProductMedia } from "@/components/product/ProductMedia";
+import { StockBadge } from "@/components/product/StockBadge";
 import { formatNaira } from "@/lib/format";
 import { cart } from "@/lib/cart";
 
-export function ProductCard({ product }: { product: Product }) {
+export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
   const off = discountPercent(product);
+  const soldOut = stockState(product) === "out";
   const [added, setAdded] = useState(false);
   const spec = [product.storage, product.ram && `${product.ram} RAM`, product.network].filter(Boolean).join(" · ");
 
@@ -21,15 +23,21 @@ export function ProductCard({ product }: { product: Product }) {
         e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
       }}
     >
-      <Link href={`/product/${product.slug}`} className="relative block aspect-[4/5] overflow-hidden" aria-label={product.name}>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_60%,rgb(62_224_127/0.16),transparent_60%)]" />
-        <div className="absolute left-3 top-3 z-10 flex gap-1.5">
-          <span className="tag-cond" data-used={product.condition === "UK-Used"}>{product.condition}</span>
-          {off > 0 && <span className="tag-sale">-{off}%</span>}
+      <Link href={`/product/${product.slug}`} className="relative block aspect-square overflow-hidden bg-panel" aria-label={product.name}>
+        <div className={`absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06] ${soldOut ? "opacity-45 grayscale" : ""}`}>
+          <ProductMedia product={product} priority={priority} />
         </div>
-        <div className="absolute inset-x-[18%] inset-y-[9%] transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-2 group-hover:rotate-[-4deg] group-hover:scale-[1.04]">
-          <ProductMedia product={product} className="h-full w-full drop-shadow-[0_30px_40px_rgba(0,0,0,0.55)]" />
+        {(product.images?.length ?? 0) > 1 && !soldOut && (
+          <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <ProductMedia product={product} index={1} />
+          </div>
+        )}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-panel/80 to-transparent" />
+        <div className="absolute left-3 top-3 z-10 flex flex-wrap gap-1.5">
+          <span className="tag-cond !bg-night/70 backdrop-blur" data-used={product.condition === "UK-Used"}>{product.condition}</span>
+          {off > 0 && !soldOut && <span className="tag-sale">-{off}%</span>}
         </div>
+        <StockBadge product={product} className="absolute bottom-3 left-3 z-10" />
       </Link>
       <div className="flex flex-1 flex-col gap-3 border-t border-line p-4 sm:p-5">
         <div>
@@ -46,15 +54,16 @@ export function ProductCard({ product }: { product: Product }) {
           </div>
           <button
             type="button"
+            disabled={soldOut}
             onClick={() => {
               cart.add(product.slug);
               setAdded(true);
               window.setTimeout(() => setAdded(false), 1400);
             }}
             className="btn btn-primary btn-sm !px-3.5"
-            aria-label={`Add ${product.name} to cart`}
+            aria-label={soldOut ? `${product.name} is sold out` : `Add ${product.name} to cart`}
           >
-            {added ? "Added ✓" : "Add"}
+            {soldOut ? "Sold out" : added ? "Added ✓" : "Add"}
           </button>
         </div>
       </div>

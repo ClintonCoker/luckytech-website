@@ -10,8 +10,10 @@ import { BranchCards } from "@/components/shared/BranchCards";
 import { Faq } from "@/components/shared/Faq";
 import { branches, faqs, store } from "@/content/store";
 import { getSiteUrl } from "@/lib/env";
+import { getCatalog } from "@/lib/catalog.server";
 
-export default function Home() {
+export default async function Home() {
+  const catalog = await getCatalog();
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": branches.map((b) => ({
@@ -25,12 +27,12 @@ export default function Home() {
   };
   return (
     <>
-      <Hero />
+      <Hero productCount={catalog.length} />
       <BrandMarquee />
-      <Featured />
-      <CategoryGrid />
+      <Featured catalog={catalog} />
+      <CategoryGrid catalog={catalog} />
       <Services />
-      <PayLater />
+      <PayLater catalog={catalog} />
       <RequestCta />
       <section className="wrap py-24 sm:py-32" aria-labelledby="stores-title">
         <SectionHead id="stores-title" eyebrow="Visit us" title={<>Two stores in Ondo State.</>} body="Walk in, test the phone, get it fixed while you wait. Our main store is in Owo, with a branch in Akure." />
