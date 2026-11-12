@@ -14,7 +14,8 @@ export async function getAllProducts({ fresh = false } = {}): Promise<Product[]>
   const { url, key } = dbSettings();
   try {
     const res = await fetch(`${url}/rest/v1/products?select=*&order=sort_order.asc,created_at.desc`, {
-      headers: { apikey: key, Authorization: `Bearer ${key}` },
+      // New "sb_secret_" keys go only in the apikey header; older JWT keys also go in Authorization.
+      headers: key.startsWith("eyJ") ? { apikey: key, Authorization: `Bearer ${key}` } : { apikey: key },
       ...(fresh ? { cache: "no-store" as const } : { next: { tags: [CATALOG_TAG], revalidate: 300 } }),
     });
     if (!res.ok) throw new Error(`Database error ${res.status}`);
