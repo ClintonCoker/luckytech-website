@@ -155,6 +155,7 @@ export async function copyPhotosAction(): Promise<Result & { remaining?: number;
   if (error) return { ok: false, error: error.message };
   const todo = (data as Pick<ProductRow, "slug" | "images">[]).filter((r) => r.images?.some((u) => !u.startsWith(own)));
   let copied = 0;
+  let firstError: string | undefined;
   for (const r of todo.slice(0, 4)) {
     const next: string[] = [];
     for (const url of r.images) {
@@ -164,21 +165,23 @@ export async function copyPhotosAction(): Promise<Result & { remaining?: number;
       }
       try {
         const res = await fetch(url);
-        if (!res.ok) throw new Error(String(res.status));
+        if (!res.ok) throw new Error(`Couldn't download a photo from the old site (error ${res.status}).`);
         const type = res.headers.get("content-type") || "image/jpeg";
         const ext = type.includes("png") ? "png" : type.includes("webp") ? "webp" : "jpg";
         const path = `${r.slug}/${Date.now()}-${Math.random().toString(36).slice(2, 7)}.${ext}`;
         const up = await client.storage.from(PHOTO_BUCKET).upload(path, await res.arrayBuffer(), { contentType: type, upsert: false });
-        if (up.error) throw up.error;
+        if (up.error) throw new Error(`Couldn't save to your photo storage: ${up.error.message}`);
         next.push(own + path);
         copied++;
-      } catch {
+      } catch (e) {
+        firstError ??= e instanceof Error ? e.message : String(e);
         next.push(url); // keep the old link if a copy fails
       }
     }
     await client.from("products").update({ images: next }).eq("slug", r.slug);
   }
   refresh();
+  if (copied === 0 && firstError) return { ok: false, error: firstError };
   return { ok: true, copied, remaining: Math.max(0, todo.length - 4) };
 }
 

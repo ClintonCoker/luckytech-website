@@ -26,7 +26,7 @@ export function SetupHelpers({ empty }: { empty: boolean }) {
         setNote(`Copying photos… ${total} done`);
         if (!r.remaining || !r.copied) break;
       }
-      setNote(`Done. ${total} photos copied to your own storage.`);
+      setNote(total ? `Done. ${total} photos copied to your own storage.` : "Nothing needed copying: all photos are already in your own storage.");
       router.refresh();
     });
 
