@@ -17,6 +17,6 @@ export async function POST(req: Request) {
   const r = parsed.data;
   const branch = branchById(r.branch)!;
   const summary = requestSummary(r);
-  const emailed = await sendStoreEmail(`Website request: ${r.needs.join(", ")} (${branch.city})`, summary, r.email || undefined);
+  const emailed = await sendStoreEmail(`Website request: ${r.needs.join(", ")} (${branch.city})`, summary);
   return NextResponse.json({ ok: true, emailed, whatsappUrl: whatsappLink(branch, summary) });
 }

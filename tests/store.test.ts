@@ -129,8 +129,8 @@ describe("shop filters", () => {
 
 describe("forms", () => {
   const good = {
-    name: "Ada Obi", phone: "0803 000 0000", email: "", branch: "owo", needs: ["Power bank"], buyingFor: "wholesale",
-    condition: "any", payment: "full", timeline: "this-week", details: "20 units of 20,000mAh power banks", website: "",
+    name: "Ada Obi", phone: "0803 000 0000", branch: "owo", needs: ["Power bank"], budget: "",
+    payLater: false, details: "20 units of 20,000mAh power banks, wholesale", website: "",
   };
   it("accepts a valid request and rejects spam or missing details", () => {
     expect(requestSchema.safeParse(good).success).toBe(true);

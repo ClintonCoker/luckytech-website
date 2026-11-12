@@ -21,17 +21,11 @@ export function RequestForm({ initialNeed = "", initialPayment = "", initialMode
   const [v, setV] = useState<RequestInput>({
     name: "",
     phone: "",
-    email: "",
     branch: "owo",
     needs: initialNeed ? [initialNeed as RequestInput["needs"][number]] : [],
-    buyingFor: "personal",
-    brandModel: initialModel,
-    condition: "any",
-    quantity: "1",
     budget: "",
-    payment: initialPayment === "pay-later" ? "pay-later" : "not-sure",
-    timeline: "this-week",
-    details: initialDetails,
+    payLater: initialPayment === "pay-later",
+    details: [initialModel, initialDetails].filter(Boolean).join(". "),
     website: "",
   });
   const [errors, setErrors] = useState<Errors>({});
@@ -108,78 +102,6 @@ export function RequestForm({ initialNeed = "", initialPayment = "", initialMode
         {err("needs")}
       </fieldset>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <label className="field">
-          <span>Brand or model (if you know)</span>
-          <input className="input" value={v.brandModel} onChange={(e) => set("brandModel", e.target.value)} placeholder="e.g. iPhone 13, 20,000mAh Oraimo" />
-        </label>
-        <label className="field">
-          <span>Condition</span>
-          <select className="input" value={v.condition} onChange={(e) => set("condition", e.target.value as RequestInput["condition"])}>
-            <option value="any">Any</option>
-            <option value="new">Brand new</option>
-            <option value="uk-used">UK-used</option>
-          </select>
-        </label>
-        <label className="field">
-          <span>Quantity</span>
-          <input className="input" inputMode="numeric" value={v.quantity} onChange={(e) => set("quantity", e.target.value)} />
-        </label>
-        <label className="field">
-          <span>Budget (₦)</span>
-          <input className="input" value={v.budget} onChange={(e) => set("budget", e.target.value)} placeholder="e.g. 200,000 to 300,000" />
-        </label>
-      </div>
-
-      <fieldset>
-        <legend className="text-sm font-semibold">Who is it for?</legend>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {([
-            ["personal", "Myself"],
-            ["wholesale", "Wholesale (to resell)"],
-            ["business", "A business or office"],
-          ] as const).map(([val, label]) => (
-            <label key={val} className="chip">
-              <input type="radio" name="buyingFor" checked={v.buyingFor === val} onChange={() => set("buyingFor", val)} />
-              {label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend className="text-sm font-semibold">How would you like to pay?</legend>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {([
-            ["full", "Pay in full"],
-            ["pay-later", "Buy now, pay later (30% down)"],
-            ["not-sure", "Not sure yet"],
-          ] as const).map(([val, label]) => (
-            <label key={val} className="chip">
-              <input type="radio" name="payment" checked={v.payment === val} onChange={() => set("payment", val)} />
-              {label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend className="text-sm font-semibold">When do you need it?</legend>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {([
-            ["today", "Today"],
-            ["this-week", "This week"],
-            ["this-month", "This month"],
-            ["just-asking", "Just asking for prices"],
-          ] as const).map(([val, label]) => (
-            <label key={val} className="chip">
-              <input type="radio" name="timeline" checked={v.timeline === val} onChange={() => set("timeline", val)} />
-              {label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-
       <label className="field">
         <span>Tell us more</span>
         <textarea
@@ -187,16 +109,27 @@ export function RequestForm({ initialNeed = "", initialPayment = "", initialMode
           className="input min-h-36"
           value={v.details}
           onChange={(e) => set("details", e.target.value)}
-          placeholder="Colour, storage, the phone it's for (for cases and screen guards), what's wrong with your phone (for repairs)…"
+          placeholder="Brand or model, new or UK-used, how many, colour or storage, and when you need it. For repairs, tell us what's wrong with the phone."
           aria-invalid={!!errors.details}
           aria-describedby="rq-details-err"
         />
         {err("details")}
       </label>
 
+      <div className="grid items-end gap-5 sm:grid-cols-2">
+        <label className="field">
+          <span>Budget in ₦ (optional)</span>
+          <input className="input" value={v.budget} onChange={(e) => set("budget", e.target.value)} placeholder="e.g. 200,000 to 300,000" />
+        </label>
+        <label className="chip h-[3.25rem] justify-center">
+          <input type="checkbox" checked={!!v.payLater} onChange={(e) => set("payLater", e.target.checked)} />
+          I want to pay later (30% down)
+        </label>
+      </div>
+
       <div className="border-t border-line pt-8">
         <p className="font-display text-xl font-semibold">How do we reach you?</p>
-        <div className="mt-5 grid gap-5 sm:grid-cols-2">
+        <div className="mt-5 grid gap-5 sm:grid-cols-3">
           <label className="field">
             <span>Your name</span>
             <input id="rq-name" className="input" autoComplete="name" value={v.name} onChange={(e) => set("name", e.target.value)} aria-invalid={!!errors.name} aria-describedby="rq-name-err" />
@@ -206,11 +139,6 @@ export function RequestForm({ initialNeed = "", initialPayment = "", initialMode
             <span>Phone / WhatsApp</span>
             <input id="rq-phone" className="input" type="tel" autoComplete="tel" placeholder="0803 000 0000" value={v.phone} onChange={(e) => set("phone", e.target.value)} aria-invalid={!!errors.phone} aria-describedby="rq-phone-err" />
             {err("phone")}
-          </label>
-          <label className="field">
-            <span>Email (optional)</span>
-            <input id="rq-email" className="input" type="email" autoComplete="email" value={v.email} onChange={(e) => set("email", e.target.value)} aria-invalid={!!errors.email} aria-describedby="rq-email-err" />
-            {err("email")}
           </label>
           <label className="field">
             <span>Nearest store</span>

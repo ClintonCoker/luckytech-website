@@ -39,17 +39,11 @@ export const needOptions = [
 export const requestSchema = z.object({
   name: z.string().trim().min(2, "Enter your name").max(80),
   phone,
-  email: z.union([z.literal(""), z.string().trim().email("Enter a valid email")]).optional(),
   branch: z.enum(["owo", "akure"]),
   needs: z.array(z.enum(needOptions)).min(1, "Pick at least one thing"),
-  buyingFor: z.enum(["personal", "wholesale", "business"]),
-  brandModel: z.string().trim().max(120).optional(),
-  condition: z.enum(["any", "new", "uk-used"]),
-  quantity: z.string().trim().max(20).optional(),
-  budget: z.string().trim().max(60).optional(),
-  payment: z.enum(["full", "pay-later", "not-sure"]),
-  timeline: z.enum(["today", "this-week", "this-month", "just-asking"]),
   details: z.string().trim().min(10, "Tell us a little more (at least 10 characters)").max(2000),
+  budget: z.string().trim().max(60).optional(),
+  payLater: z.boolean().optional(),
   /** Spam trap: real people leave this empty. */
   website: z.string().max(0).optional(),
 });
