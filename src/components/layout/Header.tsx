@@ -50,8 +50,8 @@ export function Header() {
               const active = pathname === n.href || pathname.startsWith(`${n.href}/`);
               return (
                 <li key={n.href}>
-                  <Link href={n.href} aria-current={active ? "page" : undefined} className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${active ? "text-cloud" : "text-mist hover:text-cloud"}`}>
-                    {active && <motion.span layoutId="nav-pill" className="absolute inset-0 -z-10 rounded-full bg-cloud/8 ring-1 ring-cloud/10" />}
+                  <Link href={n.href} aria-current={active ? "page" : undefined} className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${active ? "text-brand" : "text-mist hover:bg-mint hover:text-brand"}`}>
+                    {active && <motion.span layoutId="nav-pill" className="absolute inset-0 -z-10 rounded-full bg-glow/10 ring-1 ring-glow/25" />}
                     {n.label}
                   </Link>
                 </li>

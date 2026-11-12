@@ -16,7 +16,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
 
   return (
     <article
-      className="card card-glow group flex h-full flex-col transition-transform duration-500 hover:-translate-y-1"
+      className="card card-glow group flex h-full flex-col hover:-translate-y-1.5"
       onPointerMove={(e) => {
         const r = e.currentTarget.getBoundingClientRect();
         e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
@@ -39,7 +39,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         </div>
         <StockBadge product={product} className="absolute bottom-3 left-3 z-10" />
       </Link>
-      <div className="flex flex-1 flex-col gap-3 border-t border-line p-4 sm:p-5">
+      <div className="flex flex-1 flex-col gap-3 border-t border-line p-4 transition-colors group-hover:border-glow/25 sm:p-5">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-mist">{product.brand}</p>
           <h3 className="mt-1 font-display text-base font-semibold leading-snug sm:text-lg">
@@ -49,7 +49,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         </div>
         <div className="mt-auto flex items-end justify-between gap-2">
           <div>
-            <p className="font-display text-lg font-bold tabular sm:text-xl">{formatNaira(product.price)}</p>
+            <p className="font-display text-lg font-bold tabular transition-colors group-hover:text-brand sm:text-xl">{formatNaira(product.price)}</p>
             {product.compareAt && product.compareAt > product.price && <p className="text-xs text-mist line-through tabular">{formatNaira(product.compareAt)}</p>}
           </div>
           <button

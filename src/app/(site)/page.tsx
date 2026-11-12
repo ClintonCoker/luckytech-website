@@ -30,10 +30,10 @@ export default async function Home() {
       <Hero productCount={catalog.length} />
       <BrandMarquee />
       <Featured catalog={catalog} />
-      <CategoryGrid catalog={catalog} />
+      <div className="band-mint"><CategoryGrid catalog={catalog} /></div>
       <Services />
       <PayLater catalog={catalog} />
-      <RequestCta />
+      <div className="band-mint"><RequestCta /></div>
       <section className="wrap py-24 sm:py-32" aria-labelledby="stores-title">
         <SectionHead id="stores-title" eyebrow="Visit us" title={<>Two stores in Ondo State.</>} body="Walk in, test the phone, get it fixed while you wait. Our main store is in Owo, with a branch in Akure." />
         <BranchCards />
