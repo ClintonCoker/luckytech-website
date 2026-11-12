@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { isAdmin, adminConfigured } from "@/lib/auth.server";
 import { LoginForm } from "@/components/admin/LoginForm";
+import { BrandMark } from "@/components/layout/BrandMark";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Sign in" };
@@ -11,7 +12,7 @@ export default async function LoginPage() {
     <div className="relative grid min-h-dvh place-items-center overflow-hidden px-4">
       <div className="aurora" aria-hidden="true" />
       <div className="card relative w-full max-w-sm p-8">
-        <span className="grid h-12 w-12 place-items-center rounded-xl bg-brand font-display font-extrabold"><span className="whitespace-nowrap">L<span className="text-signal-soft">K</span>T</span></span>
+        <BrandMark height={52} />
         <h1 className="mt-6 font-display text-2xl font-semibold">LuckyTech admin</h1>
         <p className="mt-1 text-sm text-mist">Stock and products. Staff only.</p>
         {!adminConfigured() && (

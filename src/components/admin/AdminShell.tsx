@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandMark } from "@/components/layout/BrandMark";
 import { logoutAction } from "@/app/admin/actions";
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
@@ -7,7 +8,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-40 border-b border-line bg-night/85 backdrop-blur-xl">
         <div className="wrap flex h-16 items-center justify-between gap-4">
           <Link href="/admin" className="flex items-center gap-2.5 font-display font-semibold">
-            <span className="grid h-9 w-11 place-items-center rounded-lg bg-brand text-xs font-extrabold"><span className="whitespace-nowrap">L<span className="text-signal-soft">K</span>T</span></span>
+            <BrandMark height={36} />
             Admin
           </Link>
           <nav className="flex items-center gap-1 text-sm">
