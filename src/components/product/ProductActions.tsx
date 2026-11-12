@@ -15,8 +15,8 @@ export function ProductActions({ slug, title, price }: { slug: string; title: st
 
   return (
     <div className="mt-8 space-y-4">
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex items-center rounded-full ring-1 ring-white/15">
+      <div className="grid grid-cols-2 gap-3 sm:flex sm:items-center">
+        <div className="col-span-2 flex w-fit items-center rounded-full ring-1 ring-white/15">
           <button type="button" className="grid h-12 w-12 place-items-center text-xl" onClick={() => setQty((q) => Math.max(1, q - 1))} aria-label="One fewer">−</button>
           <span className="w-8 text-center font-semibold tabular" aria-live="polite" aria-label={`Quantity ${qty}`}>{qty}</span>
           <button type="button" className="grid h-12 w-12 place-items-center text-xl" onClick={() => setQty((q) => Math.min(20, q + 1))} aria-label="One more">+</button>
