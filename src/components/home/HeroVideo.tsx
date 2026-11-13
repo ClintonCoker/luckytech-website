@@ -19,6 +19,25 @@ export function HeroVideo({ clips }: { clips: HeroClip[] }) {
     return () => mq.removeEventListener("change", set);
   }, []);
 
+  // iPhones in Low Power Mode (and some data-saver browsers) block autoplay.
+  // The first touch, tap or scroll counts as a user gesture, so try again then.
+  useEffect(() => {
+    if (reduced) return;
+    const kick = () => {
+      const v = refs.current[active];
+      if (v && v.paused) v.play().catch(() => {});
+    };
+    const opts = { passive: true } as const;
+    window.addEventListener("touchstart", kick, opts);
+    window.addEventListener("pointerdown", kick, opts);
+    window.addEventListener("scroll", kick, opts);
+    return () => {
+      window.removeEventListener("touchstart", kick);
+      window.removeEventListener("pointerdown", kick);
+      window.removeEventListener("scroll", kick);
+    };
+  }, [active, reduced]);
+
   useEffect(() => {
     if (reduced) return;
     const v = refs.current[active];
@@ -57,6 +76,9 @@ export function HeroVideo({ clips }: { clips: HeroClip[] }) {
           poster={c.poster}
           muted
           playsInline
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
           preload={i === 0 ? "auto" : "metadata"}
           loop={clips.length === 1}
           autoPlay={i === 0 && !reduced}
